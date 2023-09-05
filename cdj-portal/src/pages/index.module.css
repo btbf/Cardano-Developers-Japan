@@ -1,6 +1,6 @@
 /**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
+ * .module.css 接尾辞が付いた CSS ファイルは CSS モジュールとして扱われます
+ * そしてローカルにスコープを設定します。
  */
 
 .heroBanner {
