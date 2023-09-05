@@ -1,5 +1,5 @@
 // @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
+// 注: 型アノテーションにより、型チェックと IDE のオートコンプリートが可能になります。
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
@@ -10,23 +10,23 @@ const config = {
   tagline: 'カルダノジャパン開発者ポータルサイト',
   favicon: 'img/favicon.ico',
 
-  // Set the production url of your site here
+  // ここにサイトの実稼働 URL を設定します
   url: 'https://your-docusaurus-test-site.com',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
+  // サイトが提供される /<baseUrl>/ パス名を設定します
+  // GitHub ページのデプロイメントの場合、通常は「/<プロジェクト名>/」です。
   baseUrl: '/',
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'Cardano Developers Japan', // Usually your GitHub org/user name.
-  projectName: 'Cardano Developers Japan', // Usually your repo name.
+  // GitHub ページのデプロイメント構成
+  // GitHub ページを使用していない場合、これらは必要ありません
+  organizationName: 'Cardano Developers Japan', // 通常は、GitHub 組織/ユーザー名です。
+  projectName: 'Cardano Developers Japan', // 通常はリポジトリ名です。
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
-  // Even if you don't use internalization, you can use this field to set useful
-  // metadata like html lang. For example, if your site is Chinese, you may want
-  // to replace "en" with "zh-Hans".
+  // 内部化を使用しない場合でも、このフィールドを使用して便利な設定を行うことができます。
+  // HTML言語のようなメタデータ。 たとえば、サイトが中国語の場合、次のようにすることができます。
+  // 「en」を「zh-Hans」に置き換えます。
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -39,15 +39,15 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
+          // これをリポジトリに変更してください。
+          // 「このページを編集」リンクを削除するには、これを削除します。
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
+          // これをリポジトリに変更してください。
+          // 「このページを編集」リンクを削除するには、これを削除します。
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
@@ -61,7 +61,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Replace with your project's social card
+      // プロジェクトのソーシャル カードに置き換えます
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
         title: 'Cardano Developers Japan',
