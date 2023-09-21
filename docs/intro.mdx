@@ -153,8 +153,8 @@ echo export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" >> $HOME
 echo export NODE_HOME=$HOME/cnode >> $HOME/.bashrc
 ```
 
-<Tabs>
-  <TabItem value="Preview の場合" label="Preview の場合">
+<Tabs queryString="current-testnet">
+  <TabItem value="preview" label="Preview の場合">
 
 ```bash
 echo export NODE_CONFIG=preview >> $HOME/.bashrc
@@ -162,7 +162,7 @@ echo export NODE_NETWORK='"--testnet-magic 2"' >> $HOME/.bashrc
 echo export CARDANO_NODE_NETWORK_ID=2 >> $HOME/.bashrc
 ```
   </TabItem>
-  <TabItem value="PreProd の場合" label="PreProd の場合">
+  <TabItem value="preprod" label="PreProd の場合">
 
 ```bash
 echo export NODE_CONFIG=preprod >> $HOME/.bashrc
@@ -279,7 +279,7 @@ wget --no-use-server-timestamps -q https://book.world.dev.cardano.org/environmen
 > Previewの場合でもPreProdの場合でも同じです。
 
 <Tabs>
-  <TabItem value="非P2P の場合" label="非P2P の場合">
+  <TabItem value="non-p2p" label="非P2P の場合">
 
 ```bash
 sed -i ${NODE_CONFIG}-config.json \
@@ -294,7 +294,7 @@ sed -i ${NODE_CONFIG}-config.json \
     -e "s/127.0.0.1/0.0.0.0/g"
 ```
   </TabItem>
-  <TabItem value="P2P の場合" label="P2P の場合">
+  <TabItem value="p2p" label="P2P の場合">
 
 ```bash
 sed -i ${NODE_CONFIG}-config.json \
@@ -329,8 +329,8 @@ source $HOME/.bashrc
 - 構成ファイルパス
 - トポロジーファイルパス など
 
-<Tabs>
-  <TabItem value="リレーノード" label="リレーノード">
+<Tabs groupId="current-node">
+  <TabItem value="relay-node" label="リレーノード">
 
 リレーノードで使用するポート番号を指定してターミナルで実行します。
 ```bash
@@ -352,7 +352,7 @@ CONFIG=\${DIRECTORY}/${NODE_CONFIG}-config.json
 EOF
 ```
   </TabItem>
-  <TabItem value="ブロックプロデューサーノード" label="ブロックプロデューサーノード">
+  <TabItem value="bp-node" label="ブロックプロデューサーノード">
 
 :::danger 注意
 - ブロックプロデューサーノードポートはセキュリティを高めるために、**49513～65535**までの任意番号を設定してください。  
@@ -390,8 +390,8 @@ EOF
 **リレーノードから実施します。**
 :::
 
-<Tabs>
-  <TabItem value="リレーノード" label="リレーノード">
+<Tabs groupId="current-node">
+  <TabItem value="relay-node" label="リレーノード" default>
 
 ```bash
 cd $NODE_HOME
@@ -399,7 +399,7 @@ chmod +x startRelayNode1.sh
 ./startRelayNode1.sh
 ```
   </TabItem>
-  <TabItem value="ブロックプロデューサーノード" label="ブロックプロデューサーノード">
+  <TabItem value="bp-node" label="ブロックプロデューサーノード">
 
 ```bash
 cd $NODE_HOME
@@ -436,8 +436,8 @@ killall -s 2 cardano-node
 以下のコードを実行して、ユニットファイルを作成します。
 
 
-<Tabs>
-  <TabItem value="リレーノード" label="リレーノード">
+<Tabs groupId="current-node">
+  <TabItem value="relay-node" label="リレーノード" default>
 
 ```bash
 cat > $NODE_HOME/cardano-node.service << EOF 
@@ -467,7 +467,7 @@ WantedBy	= multi-user.target
 EOF
 ```
   </TabItem>
-  <TabItem value="ブロックプロデューサーノード" label="ブロックプロデューサーノード">
+  <TabItem value="bp-node" label="ブロックプロデューサーノード">
 
 ```bash
 cat > $NODE_HOME/cardano-node.service << EOF 
@@ -562,8 +562,8 @@ chmod 755 gLiveView.sh
 
 **`env`**ファイル内の定義を修正します。
 
-<Tabs>
-  <TabItem value="リレーノード" label="リレーノード">
+<Tabs groupId="current-node">
+  <TabItem value="relay-node" label="リレーノード" default>
 
 ```bash
 PORT=`grep "PORT=" $NODE_HOME/startRelayNode1.sh`
@@ -571,7 +571,7 @@ b_PORT=${PORT#"PORT="}
 echo "リレーポートは${b_PORT}です"
 ```
   </TabItem>
-  <TabItem value="ブロックプロデューサーノード" label="ブロックプロデューサーノード">
+  <TabItem value="bp-node" label="ブロックプロデューサーノード">
 
 ```bash
 PORT=`grep "PORT=" $NODE_HOME/startBlockProducingNode.sh`
