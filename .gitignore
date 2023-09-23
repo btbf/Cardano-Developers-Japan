@@ -1,5 +1,5 @@
 # Dependencies
-/node_modules
+/node_modules/
 
 # Production
 /build
@@ -18,7 +18,3 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-node_modules/.cache/webpack/client-development-en/0.pack
-node_modules/.cache/webpack/client-development-en/1.pack
-node_modules/.cache/webpack/client-development-en/index.pack
-node_modules/.cache/webpack/client-development-en/index.pack.old
