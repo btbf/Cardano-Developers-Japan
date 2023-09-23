@@ -1,11 +1,10 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-
-# 2. ノードインストール
+# ノードセットアップ
 
 :::tip インストールバージョン
 ::::::note
@@ -15,7 +14,7 @@ import TabItem from '@theme/TabItem';
 ::::::
 :::
 
-## 2-1. 依存関係のインストール
+## 1-1. 依存関係のインストール
 
 ターミナルを起動し、以下のコマンドを入力しましょう！
 
@@ -154,20 +153,18 @@ echo export NODE_HOME=$HOME/cnode >> $HOME/.bashrc
 ```
 
 <Tabs>
-  <TabItem value="preview" label="Preview の場合">
-
-```bash
-echo export NODE_CONFIG=preview >> $HOME/.bashrc
-echo export NODE_NETWORK='"--testnet-magic 2"' >> $HOME/.bashrc
-echo export CARDANO_NODE_NETWORK_ID=2 >> $HOME/.bashrc
-```
-  </TabItem>
   <TabItem value="preprod" label="PreProd の場合">
 
 ```bash
 echo export NODE_CONFIG=preprod >> $HOME/.bashrc
-echo export NODE_NETWORK='"--testnet-magic 1"' >> $HOME/.bashrc
 echo export CARDANO_NODE_NETWORK_ID=1 >> $HOME/.bashrc
+```
+  </TabItem>
+  <TabItem value="preview" label="Preview の場合">
+
+```bash
+echo export NODE_CONFIG=preview >> $HOME/.bashrc
+echo export CARDANO_NODE_NETWORK_ID=2 >> $HOME/.bashrc
 ```
   </TabItem>
 </Tabs>
@@ -190,7 +187,7 @@ ghc --version
 であることを確認してください。
 :::
 
-## 2-2. ソースコードからビルド
+## 1-2. ソースコードからビルド
 
 :::caution 確認
 バイナリーファイルは必ずソースコードからビルドするようにし、整合性を確認してください。またIOGは現在ARMアーキテクチャ用のバイナリファイルを提供していませんので、Raspberry Piを使用してプールを構築する場合は、ARM用コンパイラでコンパイルする必要があります。
@@ -257,7 +254,7 @@ exit
 ```
 
 
-## 2-3. ノード設定ファイルの修正
+## 1-3. ノード設定ファイルの修正
 
 ノード構成に必要な設定ファイルを取得します。  
 - genesis.json  
@@ -276,25 +273,9 @@ wget --no-use-server-timestamps -q https://book.world.dev.cardano.org/environmen
 ```
 
 設定ファイルを書き換えるため、以下のコードを実行し、**`config.json`**ファイルを更新します。  
-> Previewの場合でもPreProdの場合でも同じです。
 
 <Tabs>
-  <TabItem value="non-p2p" label="非P2P の場合">
-
-```bash
-sed -i ${NODE_CONFIG}-config.json \
-    -e 's!"AlonzoGenesisFile": "alonzo-genesis.json"!"AlonzoGenesisFile": "'${NODE_CONFIG}'-alonzo-genesis.json"!' \
-    -e 's!"ByronGenesisFile": "byron-genesis.json"!"ByronGenesisFile": "'${NODE_CONFIG}'-byron-genesis.json"!' \
-    -e 's!"ShelleyGenesisFile": "shelley-genesis.json"!"ShelleyGenesisFile": "'${NODE_CONFIG}'-shelley-genesis.json"!' \
-    -e 's!"ConwayGenesisFile": "conway-genesis.json"!"ConwayGenesisFile": "'${NODE_CONFIG}'-conway-genesis.json"!' \
-    -e "s/TraceMempool\": true/TraceMempool\": false/g" \
-    -e 's!"TraceBlockFetchDecisions": false!"TraceBlockFetchDecisions": true!' \
-    -e '/"defaultScribes": \[/a\    \[\n      "FileSK",\n      "logs/node.json"\n    \],' \
-    -e '/"setupScribes": \[/a\    \{\n      "scFormat": "ScJson",\n      "scKind": "FileSK",\n      "scName": "logs/node.json"\n    \},' \
-    -e "s/127.0.0.1/0.0.0.0/g"
-```
-  </TabItem>
-  <TabItem value="p2p" label="P2P の場合">
+  <TabItem value="p2p" label="P2P">
 
 ```bash
 sed -i ${NODE_CONFIG}-config.json \
@@ -319,7 +300,7 @@ echo export CARDANO_NODE_SOCKET_PATH="$NODE_HOME/db/socket" >> $HOME/.bashrc
 source $HOME/.bashrc
 ```
 
-## 2-4. ノード起動スクリプトの作成
+## 1-4. ノード起動スクリプトの作成
 
 起動スクリプトには、カルダノノードを実行するために必要な変数が含まれています。
 >
@@ -329,17 +310,14 @@ source $HOME/.bashrc
 - 構成ファイルパス
 - トポロジーファイルパス など
 
-<Tabs groupId="current-node">
-  <TabItem value="relay-node" label="リレーノード">
-
-リレーノードで使用するポート番号を指定してターミナルで実行します。
+ノードで使用するポート番号を指定してターミナルで実行します。
 ```bash
 PORT=6000
 ```
 
 起動スクリプトファイル作成
 ```bash
-cat > $NODE_HOME/startRelayNode1.sh << EOF 
+cat > $NODE_HOME/startNode.sh << EOF 
 #!/bin/bash
 DIRECTORY=$NODE_HOME
 PORT=${PORT}
@@ -351,63 +329,17 @@ CONFIG=\${DIRECTORY}/${NODE_CONFIG}-config.json
 /usr/local/bin/cardano-node +RTS -N --disable-delayed-os-memory-return -I0.1 -Iw300 -A16m -F1.5 -H2500M -T -S -RTS run --topology \${TOPOLOGY} --database-path \${DB_PATH} --socket-path \${SOCKET_PATH} --host-addr \${HOSTADDR} --port \${PORT} --config \${CONFIG}
 EOF
 ```
-  </TabItem>
-  <TabItem value="bp-node" label="ブロックプロデューサーノード">
-
-:::danger 注意
-- ブロックプロデューサーノードポートはセキュリティを高めるために、**49513～65535**までの任意番号を設定してください。  
-- ここで設定する番号は、**SSHポート番号とは別の番号**を設定してください。
-:::
-
-ブロックプロデューサーノードで使用するポート番号を指定してターミナルで実行します。
-```bash
-PORT=xxxxx
-```
-
-起動スクリプトファイル作成
-```bash
-cat > $NODE_HOME/startBlockProducingNode.sh << EOF 
-#!/bin/bash
-DIRECTORY=$NODE_HOME
-PORT=${PORT}
-HOSTADDR=0.0.0.0
-TOPOLOGY=\${DIRECTORY}/${NODE_CONFIG}-topology.json
-DB_PATH=\${DIRECTORY}/db
-SOCKET_PATH=\${DIRECTORY}/db/socket
-CONFIG=\${DIRECTORY}/${NODE_CONFIG}-config.json
-/usr/local/bin/cardano-node +RTS -N --disable-delayed-os-memory-return -I0.1 -Iw300 -A16m -F1.5 -H2500M -T -S -RTS run --topology \${TOPOLOGY} --database-path \${DB_PATH} --socket-path \${SOCKET_PATH} --host-addr \${HOSTADDR} --port \${PORT} --config \${CONFIG}
-EOF
-```
-  </TabItem>
-</Tabs>
 
 
-## 2-5. ノード起動
+## 1-5. ノード起動
 
 起動スクリプトに実行権限を付与し、ブロックチェーンの同期を開始します。 
-   
-:::tip 
-**リレーノードから実施します。**
-:::
-
-<Tabs groupId="current-node">
-  <TabItem value="relay-node" label="リレーノード" default>
 
 ```bash
 cd $NODE_HOME
-chmod +x startRelayNode1.sh
-./startRelayNode1.sh
+chmod +x startNode.sh
+./startNode.sh
 ```
-  </TabItem>
-  <TabItem value="bp-node" label="ブロックプロデューサーノード">
-
-```bash
-cd $NODE_HOME
-chmod +x startBlockProducingNode.sh
-./startBlockProducingNode.sh
-```
-  </TabItem>
-</Tabs>
 
 
 :::info
@@ -418,7 +350,7 @@ chmod +x startBlockProducingNode.sh
 > Ctrl+C
 
 
-## 2-6. 自動起動の設定(systemd)
+## 1-6. 自動起動の設定(systemd)
 
 先程のスクリプトだけでは、ターミナル画面を閉じるとノードが終了してしまうので、スクリプトをサービスとして登録し、自動起動するように設定しましょう！
 
@@ -436,9 +368,6 @@ killall -s 2 cardano-node
 以下のコードを実行して、ユニットファイルを作成します。
 
 
-<Tabs groupId="current-node">
-  <TabItem value="relay-node" label="リレーノード" default>
-
 ```bash
 cat > $NODE_HOME/cardano-node.service << EOF 
 # The Cardano node service (part of systemd)
@@ -453,7 +382,7 @@ After           = network-online.target
 User            = ${USER}
 Type            = simple
 WorkingDirectory= ${NODE_HOME}
-ExecStart       = /bin/bash -c '${NODE_HOME}/startRelayNode1.sh'
+ExecStart       = /bin/bash -c '${NODE_HOME}/startNode.sh'
 KillSignal=SIGINT
 RestartKillSignal=SIGINT
 TimeoutStopSec=300
@@ -466,38 +395,7 @@ SyslogIdentifier=cardano-node
 WantedBy	= multi-user.target
 EOF
 ```
-  </TabItem>
-  <TabItem value="bp-node" label="ブロックプロデューサーノード">
 
-```bash
-cat > $NODE_HOME/cardano-node.service << EOF 
-# The Cardano node service (part of systemd)
-# file: /etc/systemd/system/cardano-node.service 
-
-[Unit]
-Description     = Cardano node service
-Wants           = network-online.target
-After           = network-online.target 
-
-[Service]
-User            = ${USER}
-Type            = simple
-WorkingDirectory= ${NODE_HOME}
-ExecStart       = /bin/bash -c '${NODE_HOME}/startBlockProducingNode.sh'
-KillSignal=SIGINT
-RestartKillSignal=SIGINT
-TimeoutStopSec=300
-LimitNOFILE=32768
-Restart=always
-RestartSec=5
-SyslogIdentifier=cardano-node
-
-[Install]
-WantedBy	= multi-user.target
-EOF
-```
-  </TabItem>
-</Tabs>
 
 `/etc/systemd/system`にユニットファイルをコピーして、権限を付与します。
 ```bash
@@ -536,7 +434,7 @@ source $HOME/.bashrc
 > cnstop ・・・ノード停止  
 :::
 
-## 2-7. gLiveViewのインストール
+## 1-7. gLiveViewのインストール
 
 `cardano-node`は、ログが流れる画面だけでは何が表示されているのかよくわかりません。  
 それを視覚的に確認できるツールが**`gLiveView`**です。
@@ -562,24 +460,13 @@ chmod 755 gLiveView.sh
 
 **`env`**ファイル内の定義を修正します。
 
-<Tabs groupId="current-node">
-  <TabItem value="relay-node" label="リレーノード" default>
 
 ```bash
-PORT=`grep "PORT=" $NODE_HOME/startRelayNode1.sh`
+PORT=`grep "PORT=" $NODE_HOME/startNode.sh`
 b_PORT=${PORT#"PORT="}
 echo "リレーポートは${b_PORT}です"
 ```
-  </TabItem>
-  <TabItem value="bp-node" label="ブロックプロデューサーノード">
 
-```bash
-PORT=`grep "PORT=" $NODE_HOME/startBlockProducingNode.sh`
-b_PORT=${PORT#"PORT="}
-echo "ブロックプロデューサーポートは${b_PORT}です"
-```
-  </TabItem>
-</Tabs>
 
 ```bash
 sed -i $NODE_HOME/scripts/env \
@@ -619,5 +506,4 @@ source $HOME/.bashrc
 
 :::caution 重要：ノード同期について
 0エポックからブロックチェーンデータをダウンロードして同期しますので、最新エポックに追いつくまでに1日半～2日程度かかります。**完全に同期するまで次の項目には進めません。**  
-BPサーバー、または2台目のリレーサーバーでも同じ作業を実施してください。
 :::
