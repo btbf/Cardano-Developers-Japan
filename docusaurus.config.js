@@ -42,14 +42,14 @@ const config = {
           // これをリポジトリに変更してください。
           // 「このページを編集」リンクを削除するには、これを削除します。
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/btbf/Cardano-Developers-Japan/tree/main/docs/',
         },
         blog: {
           showReadingTime: true,
           // これをリポジトリに変更してください。
           // 「このページを編集」リンクを削除するには、これを削除します。
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/btbf/Cardano-Developers-Japan/tree/main/docs/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -78,7 +78,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'right'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/btbf/Cardano-Developers-Japan',
             label: 'GitHub',
             position: 'right',
           },
@@ -92,7 +92,7 @@ const config = {
             items: [
               {
                 label: 'Tutorial',
-                to: '/docs/intro',
+                to: '/docs/overview',
               },
             ],
           },
@@ -123,7 +123,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Cardano Developers Japan`,
+        copyright: `Copyright © 2023-${new Date().getFullYear()} Cardano Developers Japan`,
       },
       prism: {
         theme: lightCodeTheme,
