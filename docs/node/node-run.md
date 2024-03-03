@@ -1,12 +1,13 @@
-# ノードを起動する
+# **ノード起動**
 
-## **1. ノード起動スクリプトの作成**
+## **スクリプト作成**
 
-起動スクリプトには、ディレクトリ、ポート番号、DBパス、構成ファイルパス、トポロジーファイルパスなど、カルダノノードを実行するために必要な変数が含まれています。
+!!! tip "Tip"
+    起動スクリプトには、{==ディレクトリ、ポート番号、DBパス、構成ファイルパス、トポロジーファイルパス==}など、{==カルダノノードを実行するために必要な変数が含まれています。==}
 
 
-起動スクリプトファイルを作成する
-```bash
+起動スクリプトファイルを作成し、起動スクリプトに実行権限を付与します。
+``` bash title="startRelayNode1.sh"
 cat > $NODE_HOME/startRelayNode1.sh << EOF 
 #!/bin/bash
 DIRECTORY=$NODE_HOME
@@ -20,18 +21,16 @@ CONFIG=\${DIRECTORY}/${NODE_CONFIG}-config.json
 EOF
 ```
 
-起動スクリプトに実行権限を付与する
-   
-```bash
+``` bash
 cd $NODE_HOME
 chmod +x startRelayNode1.sh
 ```
 
-## **2. 自動起動の設定(systemd)**
+### **自動起動の設定(systemd)**
 
-ユニットファイルを作成します。
+ユニットファイルの作成
 
-```bash
+``` bash title="cardano-node.service"
 cat > $NODE_HOME/cardano-node.service << EOF 
 # The Cardano node service (part of systemd)
 # file: /etc/systemd/system/cardano-node.service 
@@ -59,26 +58,23 @@ WantedBy	= multi-user.target
 EOF
 ```
 
-`/etc/systemd/system`にユニットファイルをコピーして、権限を付与します。
-
-```bash
+システムフォルダにユニットファイルをコピーして、権限を付与します。
+``` bash
 sudo cp $NODE_HOME/cardano-node.service /etc/systemd/system/cardano-node.service
 ```
-
-```bash
+``` bash
 sudo chmod 644 /etc/systemd/system/cardano-node.service
 ```
 
 次のコマンドを実行して、OS起動時にサービスの自動起動を有効にします。
-
-```text
+``` bash
 sudo systemctl daemon-reload
 sudo systemctl enable cardano-node
 ```
 
-!!! hint "エイリアス設定"
-    スクリプトへのパスを通し、任意の単語で起動出来るようにする。
-    ```bash
+!!! info "エイリアスの設定"
+    任意の単語で起動出来るように設定します。
+    ``` bash
     echo alias cnode='"journalctl -u cardano-node -f"' >> $HOME/.bashrc
     echo alias cnstart='"sudo systemctl start cardano-node"' >> $HOME/.bashrc
     echo alias cnrestart='"sudo systemctl reload-or-restart cardano-node"' >> $HOME/.bashrc
@@ -86,38 +82,54 @@ sudo systemctl enable cardano-node
     source $HOME/.bashrc
     ```
 
-    単語を入力するだけで、起動状態(ログ)を確認できます。  
-    ``` { .yaml .no-copy }
-    cnode ・・・ログ表示
-    cnstart ・・・ノード起動
-    cnrestart ・・・ノード再起動
-    cnstop ・・・ノード停止
-    ```
+    !!! tip "エイリアス"
+        === "ログ表示"
+            ``` bash
+            cnode
+            ```
+            
+        === "ノード起動"
+            ``` bash
+            cnstart
+            ```
+            
+        === "ノード再起動"
+            ``` bash
+            cnrestart
+            ```
+            
+        === "ノード停止"
+            ``` bash
+            cnstop
+            ```
 
-## **3. gLiveViewのインストール**
+
+
+
+
+
+## **gLiveViewのインストール**
  
-
-!!! info ""
-    gLiveViewはノードステータスを可視化するTUIツールです。  
+!!! info "gLiveViewについて"
+    gLiveViewは、ノードステータスを可視化するTUIツールです。  
     このツールはカルダノコミュニティ [Guild Operators](https://cardano-community.github.io/guild-operators/#/Scripts/gliveview) の功績によるものです。
 
 
 Guild LiveViewをインストールします。
 
-```bash
+``` bash
 mkdir $NODE_HOME/scripts
 cd $NODE_HOME/scripts
 sudo apt install bc tcptraceroute -y
 ```
-```bash
+
+``` bash
 curl -s -o gLiveView.sh https://raw.githubusercontent.com/cardano-community/guild-operators/master/scripts/cnode-helper-scripts/gLiveView.sh
 curl -s -o env https://raw.githubusercontent.com/cardano-community/guild-operators/master/scripts/cnode-helper-scripts/env
 chmod 755 gLiveView.sh
 ```
 
-
-
-```bash
+``` bash
 sed -i $NODE_HOME/scripts/env \
     -e '1,73s!#CNODE_HOME="/opt/cardano/cnode"!CNODE_HOME=${NODE_HOME}!' \
     -e '1,73s!#UPDATE_CHECK="Y"!UPDATE_CHECK="N"!' \
@@ -125,32 +137,52 @@ sed -i $NODE_HOME/scripts/env \
     -e '1,73s!#SOCKET="${CNODE_HOME}/sockets/node0.socket"!SOCKET="${CNODE_HOME}/db/socket"!'
 ```
 
+## **ノードを起動**
 
-## **4.ノードを起動する**
-```bash
+カルダノノードを起動します。
+``` bash
 sudo systemctl start cardano-node
 ```
 
-ノードログを確認する
-```
-journalctl --unit=cardano-node --follow
-```
-!!! note "チェーン同期確認"
-    * `Started opening Ledger DB` と表示されていたら同期準備中です。
-    * チェーン同期までに4分前後かかります。
-    * Ctrl + c で閉じてもノードは停止しません。
+起動後のノードログを確認
+!!! tip "ログ確認"
+    === "エイリアス"
+        ``` bash
+        cnode
+        ```
+        
+    === "or"
+    
+    === "コマンド"
+        ``` bash
+        journalctl --unit=cardano-node --follow
+        ```
 
 
-GliveView起動エイリアス登録
-```bash
+チェーンが同期するまでお待ちください。
+> およそ4分前後かかります。
+!!! tip "チェーン同期確認について"
+    * {==**Started opening Ledger DB**と表示されていたら**同期準備中**です。==}
+    > ++ctrl+c++ で閉じてもノードは停止しません。
+    
+    !!! tip "チェーン同期確認"
+        ``` bash
+        cardano-cli query tip $NODE_NETWORK | grep syncProgress
+        ```
+        > 戻り値が**"syncProgress": "100.00"**であれば同期完了
+
+
+エイリアス設定
+
+``` bash
 echo alias glive="'cd $NODE_HOME/scripts; ./gLiveView.sh'" >> $HOME/.bashrc
 source $HOME/.bashrc
 ```
     
-gLiveviewを起動する
+gLiveviewを起動します。
 
-```bash
+``` bash
 glive
 ```
 
-![Guild Live View](../images/glive.PNG)
+![Guild Live View](https://docs.spojapanguild.net/images/glive.PNG)
