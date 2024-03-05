@@ -2,7 +2,7 @@
 
 ## **ウロボロスプロトコルとは？**
 
-![](https://global.discourse-cdn.com/business4/uploads/cardano/original/3X/8/a/8a43e6e71d89b137fc322bcc81c8ace2cf298a95.jpeg)
+![Ouroboros-Pic](../images/Ouroboros-Pic.png)
 
 ### [ウロボロスプロトコル - Ouroboros Protocol](https://cardano.org/ouroboros)
 

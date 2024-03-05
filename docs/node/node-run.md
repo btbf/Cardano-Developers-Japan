@@ -185,4 +185,4 @@ gLiveviewを起動します。
 glive
 ```
 
-![Guild Live View](https://docs.spojapanguild.net/images/glive.PNG)
+![Guild Live View](../images/gLiveView.png)
