@@ -110,5 +110,6 @@ nav:
     - 'ネットワーク概要' : 'node/cardano-network.md'
     - 'ノードインストール' : 'node/node-install.md'
     - 'ノード起動' : 'node/node-run.md'
-
-
+  - 'ウォレット操作':
+    - 'ウォレットキーの生成' : 'wallet/create-wallet-address-key.md'
+    - 'tAdaのリクエスト' : 'wallet/request-tada.md'
