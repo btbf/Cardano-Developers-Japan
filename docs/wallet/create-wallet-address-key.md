@@ -40,17 +40,23 @@ cardano-cli address build \
     $NODE_NETWORK
 ```
 
-### **パーミッション変更**
-
-パーミッションを変更します。
-
+- ### **パーミッション変更**
 ``` bash
 chmod 400 payment.vkey
 chmod 400 payment.skey
 chmod 400 payment.addr
 ```
 
-### **支払い用アドレスに入金**
+## **プロトコルパラメータの取得**
+``` bash
+cd $NODE_HOME
+cardano-cli query protocol-parameters \
+    $NODE_NETWORK \
+    --out-file params.json
+```
+
+
+## **支払い用アドレスに入金**
 
 !!! info "入金について"
     [テストネット用ADAのリクエスト](././request-tada.md/#_1)して、あなたの支払いアドレスに入金します。

@@ -134,7 +134,7 @@ sed -i $NODE_HOME/scripts/env \
     -e '1,73s!#CNODE_HOME="/opt/cardano/cnode"!CNODE_HOME=${NODE_HOME}!' \
     -e '1,73s!#UPDATE_CHECK="Y"!UPDATE_CHECK="N"!' \
     -e '1,73s!#CONFIG="${CNODE_HOME}/files/config.json"!CONFIG="${CNODE_HOME}/'${NODE_CONFIG}'-config.json"!' \
-    -e '1,73s!#SOCKET="${CNODE_HOME}/sockets/node0.socket"!SOCKET="${CNODE_HOME}/db/socket"!'
+    -e '1,73s!#SOCKET="${CNODE_HOME}/sockets/node.socket"!SOCKET="${CNODE_HOME}/db/socket"!'
 ```
 
 ## **ノードを起動**
@@ -160,7 +160,7 @@ sudo systemctl start cardano-node
 
 
 チェーンが同期するまでお待ちください。
-> およそ4分前後かかります。
+> 数秒〜数分かかります。
 !!! tip "チェーン同期確認について"
     * {==**Started opening Ledger DB**と表示されていたら**同期準備中**です。==}
     > ++ctrl+c++ で閉じてもノードは停止しません。

@@ -113,3 +113,4 @@ nav:
   - 'ウォレット操作':
     - 'ウォレットキーの生成' : 'wallet/create-wallet-address-key.md'
     - 'tAdaのリクエスト' : 'wallet/request-tada.md'
+    - 'トランザクション送受信' : 'wallet/tx-send-receive.md'
