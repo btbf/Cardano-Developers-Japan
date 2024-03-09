@@ -37,9 +37,9 @@
 新規tmuxセッションを開設し、Ubuntuを最新状態に更新。その後、必要なパッケージをインストールし、作業ディレクトリを作成します。
 
 ``` bash
-tmux new -s build
 sudo apt update -y && sudo apt upgrade -y
 sudo apt install git jq bc automake tmux rsync htop curl build-essential pkg-config libffi-dev libgmp-dev libssl-dev libtinfo-dev libsystemd-dev zlib1g-dev make g++ wget libncursesw5 libtool autoconf liblmdb-dev -y
+tmux new -s build
 mkdir $HOME/git
 ```
 
@@ -145,40 +145,6 @@ ghc --version
         | ----------- | ------------------------------------ |
         | **`3.8.1.0`** | **`8.10.7`** |
 
-
-環境変数を設定し、環境変数に接続ネットワークを指定後、`.bashrc`を再読み込みします。
-> ノード設定ファイルは`$NODE\_HOME(例：/home/user/cnode)`に設定されます。
-
-``` bash
-echo PATH="$HOME/.local/bin:$PATH" >> $HOME/.bashrc
-echo export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" >> $HOME/.bashrc
-echo export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" >> $HOME/.bashrc
-echo export NODE_HOME=$HOME/cnode >> $HOME/.bashrc
-echo export NODE_CONFIG=preprod >> $HOME/.bashrc
-echo export NODE_NETWORK='"--testnet-magic 1"' >> $HOME/.bashrc
-echo export CARDANO_NODE_NETWORK_ID=1 >> $HOME/.bashrc
-```
-
-??? その他のネットワークの場合はこちら
-    === "Preview(テストネット)"
-        ``` bash
-        echo export NODE_CONFIG=preview >> $HOME/.bashrc
-        echo export NODE_NETWORK='"--testnet-magic 2"' >> $HOME/.bashrc
-        echo export CARDANO_NODE_NETWORK_ID=2 >> $HOME/.bashrc
-        ```
-    
-    
-    === "Mainnet(メインネット)"
-        ``` bash
-        echo export NODE_CONFIG=mainnet >> $HOME/.bashrc
-        echo export NODE_NETWORK='"--mainnet"' >> $HOME/.bashrc
-        echo export CARDANO_NODE_NETWORK_ID=mainnet >> $HOME/.bashrc
-        ```
-    
-``` bash
-source $HOME/.bashrc
-```
-
 ## **ビルド**
 
 専用リポジトリからダウンロード後、Cabalのビルドオプションを構成し、カルダノノードをビルドします。
@@ -216,8 +182,8 @@ sudo cp $(find $HOME/git/cardano-node/dist-newstyle/build -type f -name "cardano
 **`cardano-cli`**と**`cardano-node`**のバージョンが最新Gitタグバージョンであることを確認してください。
 
 ``` bash
-cardano-node version
 cardano-cli version
+cardano-node version
 ```
 
 !!! tip "戻り値チェック"
@@ -236,6 +202,40 @@ tmuxセッションを閉じます。
 exit
 ```
 
+### **環境変数の設定、再読み込み**
+環境変数に接続ネットワーク等を指定後、`.bashrc`を再読み込みします。
+> ノード設定ファイルは`$NODE\_HOME(例：/home/user/cnode)`に設定されます。
+
+``` bash
+echo PATH="$HOME/.local/bin:$PATH" >> $HOME/.bashrc
+echo export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" >> $HOME/.bashrc
+echo export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" >> $HOME/.bashrc
+echo export NODE_HOME=$HOME/cnode >> $HOME/.bashrc
+echo export NODE_CONFIG=preprod >> $HOME/.bashrc
+echo export NODE_NETWORK='"--testnet-magic 1"' >> $HOME/.bashrc
+echo export CARDANO_NODE_NETWORK_ID=1 >> $HOME/.bashrc
+```
+
+??? その他のネットワークの場合はこちら
+    === "Preview(テストネット)"
+        ``` bash
+        echo export NODE_CONFIG=preview >> $HOME/.bashrc
+        echo export NODE_NETWORK='"--testnet-magic 2"' >> $HOME/.bashrc
+        echo export CARDANO_NODE_NETWORK_ID=2 >> $HOME/.bashrc
+        ```
+    
+    
+    === "Mainnet(メインネット)"
+        ``` bash
+        echo export NODE_CONFIG=mainnet >> $HOME/.bashrc
+        echo export NODE_NETWORK='"--mainnet"' >> $HOME/.bashrc
+        echo export CARDANO_NODE_NETWORK_ID=mainnet >> $HOME/.bashrc
+        ```
+    
+``` bash
+source $HOME/.bashrc
+```
+
 ### **ノード設定ファイルの修正**
 
 !!! info "ノード構成設定ファイルの取得"
@@ -246,7 +246,7 @@ exit
 mkdir $NODE_HOME
 cd $NODE_HOME
 wget --no-use-server-timestamps -q https://book.play.dev.cardano.org/environments/${NODE_CONFIG}/byron-genesis.json -O ${NODE_CONFIG}-byron-genesis.json
-wget --no-use-server-timestamps -q https://book.play.dev.cardano.org/environments/${NODE_CONFIG}/topology-legacy.json -O ${NODE_CONFIG}-topology.json
+wget --no-use-server-timestamps -q https://book.play.dev.cardano.org/environments/${NODE_CONFIG}/topology.json -O ${NODE_CONFIG}-topology.json
 wget --no-use-server-timestamps -q https://book.play.dev.cardano.org/environments/${NODE_CONFIG}/shelley-genesis.json -O ${NODE_CONFIG}-shelley-genesis.json
 wget --no-use-server-timestamps -q https://book.play.dev.cardano.org/environments/${NODE_CONFIG}/alonzo-genesis.json -O ${NODE_CONFIG}-alonzo-genesis.json
 wget --no-use-server-timestamps -q https://book.play.dev.cardano.org/environments/${NODE_CONFIG}/conway-genesis.json -O ${NODE_CONFIG}-conway-genesis.json
