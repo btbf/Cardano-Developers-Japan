@@ -2,7 +2,10 @@
 
 ## **ウロボロスプロトコルとは？**
 
-![Ouroboros-Pic](../images/Ouroboros-Pic.png)
+<figure markdown="span">
+  ![Ouroboros-Pic](../images/Ouroboros-Pic.png){ width="600" height="300" }
+  <figcaption>Ouroboros</figcaption>
+</figure>
 
 ### [ウロボロスプロトコル - Ouroboros Protocol](https://cardano.org/ouroboros)
 

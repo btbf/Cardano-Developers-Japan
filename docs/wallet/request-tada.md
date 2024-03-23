@@ -1,8 +1,14 @@
 # **テストAda（tAda）のリクエスト**
 
-## **テストネットの蛇口（Testnets faucet）について**
-カルダノテストネットで使用するテストネット用ADA（tAda）を提供するサービスです。
+## **テストネットの蛇口（Testnets faucet）とは？**
 
+<figure markdown="span">
+  ![cardano-faucet-Pic](../images/cardano-faucet.png){ width="300" height="150" }
+  <figcaption></figcaption>
+</figure>
+
+## テストネット用ADA（tAda）
+カルダノテストネットで使用するテストネット用ADA（tAda）を提供するサービスです。
 !!! tip "詳細"
     {==カルダノテストネットは、カルダノメインネットとは別の独立したネットワークであるため、独自のトークンが必要==}です。このテストネット用ADA（tAda）には「現実世界」の価値はありませんが、ユーザーはメインネットで実際のADAを費やすことなく、カルダノテストネット機能を試すことが可能です。  
     
@@ -13,7 +19,7 @@
     - ステークプールの運営方法を学ぶ
     ```
 
-### **リクエスト方法**
+## **リクエスト方法**
 
 まずはじめに[Testnets faucet](https://docs.cardano.org/cardano-testnet/tools/faucet/)のサイトにアクセスします。
 

@@ -23,7 +23,7 @@ theme:
         name: ライトモード
 
   font:
-    text: Noto Sans Japanese
+    text: Noto Serif Japanese
     code: Source Code Pro
 
   language: ja
@@ -40,6 +40,7 @@ theme:
     - search.share
     - content.code.copy
     - content.code.annotate
+    - content.code.select
 
 extra:
   consent:
@@ -114,3 +115,5 @@ nav:
     - 'ウォレットキーの生成' : 'wallet/create-wallet-address-key.md'
     - 'tAdaのリクエスト' : 'wallet/request-tada.md'
     - 'トランザクション送受信' : 'wallet/tx-send-receive.md'
+  - 'リファレンス':
+    - 'カルダノCLIについて' : 'reference/about-cardano-cli.md'
